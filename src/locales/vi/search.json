@@ -1,0 +1,9 @@
+{
+  "title": "Đừng tìm kiếm nữa — hãy tìm ra nó.",
+  "placeholder": {
+    "search": "Sản phẩm, nhãn hiệu, màu sắc, ..."
+  },
+  "alert": {
+    "not_found": "Không tìm thấy sản phẩm nào!"
+  }
+}
