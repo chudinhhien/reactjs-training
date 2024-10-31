@@ -3,18 +3,20 @@ import { Product } from "../@types/Product";
 import { getProducts } from "../api/productAPI";
 import ProductItem from "./productItem";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
 
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const { category } = useParams<{category: string}>();
   const { t } = useTranslation();
 
   useEffect(() => {
     async function loadProduct() {
-      const data = await getProducts();
+      const data = await getProducts(category as string);
       setProducts(data);
     }
     loadProduct();
-  }, []);
+  }, [category]);
 
   return (
     <>
