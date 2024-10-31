@@ -1,0 +1,9 @@
+{
+  "title": "Stop looking for an item — find it.",
+  "placeholder": {
+    "search": "Product,brand,color,..."
+  },
+  "alert": {
+    "not_found": "Not found product!"
+  }
+}
