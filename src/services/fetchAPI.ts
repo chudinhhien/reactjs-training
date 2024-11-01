@@ -1,6 +1,16 @@
-export async function fetchAPI(category?: string) {
+import { FilterOptions } from "../@types/FilterOptions";
+
+export async function fetchAPI(filters: FilterOptions = {}) {
   const url = process.env.REACT_APP_URL_API as string;
-  console.log(...(category ? [["hierarchicalCategories.lvl0:" + category]] : []));
+
+  const facetFilters: string[][] = [
+    ...(filters.freeShipping ? [["free_shipping:true"]] : []),
+    ...(filters.categoryName ? [["hierarchicalCategories.lvl0:" + filters.categoryName]] : []),
+    ...(filters.brands && filters.brands.length > 0 ? [filters.brands.map((brand) => `brand:${brand}`)] : []),
+    ...(filters.priceRange ? [["price:[" + filters.priceRange.min + " TO " + filters.priceRange.max + "]"]] : []),
+    ...(filters.rating ? [["rating:" + filters.rating]] : []),
+  ];
+
   const options = {
     method: "POST",
     headers: {
@@ -13,10 +23,7 @@ export async function fetchAPI(category?: string) {
           indexName: "instant_search",
           attributesToSnippet: ["description:10"],
           clickAnalytics: true,
-          facetFilters: [
-            ["free_shipping:true"],
-            ...(category ? [["hierarchicalCategories.lvl0:" + category]] : [])
-          ],
+          facetFilters,
           facets: [
             "brand",
             "free_shipping",

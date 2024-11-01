@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import clearFilter from '../../assets/icons/clearFilter.svg'
 import FilterByCategory from "./filterByCategory";
+import FilterByBrands from "./filterByBrands";
 
 const Filters: React.FC = () => {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ const Filters: React.FC = () => {
         </button>
       </div>
       <FilterByCategory title={t('filters.category')}/>
+      <FilterByBrands title={t('filters.brands')} />
     </>
   )
 }
