@@ -7,7 +7,19 @@
     "title": "Filters",
     "clear filter": "Clear filter",
     "category": "Category",
-    "brands": "Brands"
+    "brands": "Brands",
+    "price": "Price",
+    "free shipping": "Free shipping",
+    "description": "Display only items with free shipping",
+    "ratings": "Ratings"
+  },
+  "sort": {
+    "sort by featured": "Sort by featured",
+    "price ascending": "Price ascending",
+    "price descending": "Price descending"
+  },
+  "hits": {
+    "hits per page": "hits per page"
   },
   "alert": {
     "not_found": "Not found product!"
