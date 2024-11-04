@@ -6,7 +6,8 @@
   "filters": {
     "title": "Filters",
     "clear filter": "Clear filter",
-    "category": "Category"
+    "category": "Category",
+    "brands": "Brands"
   },
   "alert": {
     "not_found": "Not found product!"

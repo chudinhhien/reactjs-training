@@ -24,19 +24,6 @@ function App() {
               </div>
             }
           />
-          <Route
-            path="/:category"
-            element={
-              <div className="flex w-full">
-                <div className="basis-1/4">
-                  <Filters />
-                </div>
-                <div className="basis-3/4">
-                  <ProductList />
-                </div>
-              </div>
-            }
-          />
         </Routes>
       </div>
     </>

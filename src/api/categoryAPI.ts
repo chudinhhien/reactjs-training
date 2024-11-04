@@ -1,13 +1,12 @@
 import { Category } from "../@types/Category";
+import { FilterOptions } from "../@types/FilterOptions";
 import { fetchAPI } from "../services/fetchAPI";
 
-export async function getCategories(): Promise<Category[]> {
+export async function getCategories(filters: FilterOptions): Promise<Category[]> {
   try {
-    const data = await fetchAPI();
+    const data = await fetchAPI(filters);
     const rawCategories = data.results[0].facets['hierarchicalCategories.lvl0'];
-    const rawSubCategories = data.results[0].facets['hierarchicalCategories.lvl1'];
-  
-    console.log(rawSubCategories);
+
     const categories: Category[] = Object.entries(rawCategories).map(([name,count]) => ({
       name,
       count: Number(count)
@@ -19,9 +18,9 @@ export async function getCategories(): Promise<Category[]> {
   }
 }
 
-export async function getSubCategories(category: string): Promise<Category[]> {
+export async function getSubCategories(filters: FilterOptions): Promise<Category[]> {
   try {
-    const data = await fetchAPI(category);
+    const data = await fetchAPI(filters);
     const rawSubCategories = data.results[0].facets['hierarchicalCategories.lvl1'];
 
     const subCategories: Category[] = Object.entries(rawSubCategories).map(([name, count]) => ({

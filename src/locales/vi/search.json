@@ -9,6 +9,7 @@
   "filters": {
     "title": "Lọc",
     "clear filter": "Xóa bộ lọc",
-    "category": "Danh mục"
+    "category": "Danh mục",
+    "brands": "Thương hiệu"
   }
 }
