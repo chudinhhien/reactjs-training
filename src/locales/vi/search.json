@@ -10,6 +10,18 @@
     "title": "Lọc",
     "clear filter": "Xóa bộ lọc",
     "category": "Danh mục",
-    "brands": "Thương hiệu"
+    "brands": "Thương hiệu",
+    "price": "Giá cả",
+    "free shipping": "Miễn phí vận chuyển",
+    "description": "Chỉ hiển thị sản phẩm miễn phí vận chuyển",
+    "ratings": "Đánh giá"
+  },
+  "sort": {
+    "sort by featured": "Sắp xếp theo đặc điểm",
+    "price ascending": "Giá tăng dần",
+    "price descending": "Giá giảm dần"
+  },
+  "hits": {
+    "hits per page": "sản phẩm trên trang"
   }
 }

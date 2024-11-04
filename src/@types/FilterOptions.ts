@@ -4,4 +4,8 @@ export interface FilterOptions {
   freeShipping?: boolean;
   priceRange?: { min: number; max: number };
   rating?: number;
+  sortBy?: string;
+  page?: number;
+  hits?: number,
+  query?: string
 }

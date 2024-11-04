@@ -6,52 +6,69 @@ export async function fetchAPI(filters: FilterOptions = {}) {
   const facetFilters: string[][] = [
     ...(filters.freeShipping ? [["free_shipping:true"]] : []),
     ...(filters.categoryName ? [["hierarchicalCategories.lvl0:" + filters.categoryName]] : []),
-    ...(filters.brands && filters.brands.length > 0 ? [filters.brands.map((brand) => `brand:${brand}`)] : []),
-    ...(filters.priceRange ? [["price:[" + filters.priceRange.min + " TO " + filters.priceRange.max + "]"]] : []),
-    ...(filters.rating ? [["rating:" + filters.rating]] : []),
+    ...(filters.brands && filters.brands.length > 0
+      ? [filters.brands.map((brand) => `brand:${brand}`)]
+      : [])
   ];
+
+  const numericFilters: string[] = [];
+  if (filters.priceRange) {
+    const { min, max } = filters.priceRange;
+    if (min !== undefined) numericFilters.push(`price>=${min}`);
+    if (max !== undefined) numericFilters.push(`price<=${max}`);
+  }
+
+  if (filters.rating) {
+    numericFilters.push(`rating>=${filters.rating}`);
+    numericFilters.push(`rating<=5`);
+  }
 
   const options = {
     method: "POST",
     headers: {
       "Accept": "application/json",
-      "Content-Type": "text/plain"
+      "Content-Type": "text/plain",
     },
     body: JSON.stringify({
       requests: [
         {
-          indexName: "instant_search",
+          indexName: `${filters.sortBy ? filters.sortBy : "instant_search"}`,
           attributesToSnippet: ["description:10"],
           clickAnalytics: true,
           facetFilters,
+          numericFilters,
           facets: [
             "brand",
             "free_shipping",
             "hierarchicalCategories.lvl0",
             "hierarchicalCategories.lvl1",
             "price",
-            "rating"
+            "rating",
           ],
           highlightPostTag: "__/ais-highlight__",
           highlightPreTag: "__ais-highlight__",
-          hitsPerPage: 16,
+          hitsPerPage: `${filters.hits ? filters.hits : 16}`,
           maxValuesPerFacet: 10,
-          page: 0,
+          page: `${filters.page ? filters.page - 1 : 0 }`,
           removeWordsIfNoResults: "allOptional",
           snippetEllipsisText: "…",
           userToken: process.env.REACT_APP_USER_TOKEN,
           sortFacetValuesBy: "count",
-        }
-      ]
-    })
-  }
+          query: filters.query
+        },
+      ],
+    }),
+  };
 
-  return fetch(url,options)
-    .then(res => res.json())
-    .then(data => {
-      return data;
-    })
-    .catch(error => {
-      throw error;
-    })
+  try {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
 }

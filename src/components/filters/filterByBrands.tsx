@@ -1,7 +1,6 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
-import debounce from "debounce";
 import { Brand } from "../../@types/Brand";
 import { FilterProps } from "../../@types/FilterProps";
 import { getBrands } from "../../api/brandsAPI";
@@ -9,50 +8,33 @@ import useFilterOptionsFromUrl from "../../services/useFilterOptionsFromUrl";
 
 const FilterByBrands: React.FC<FilterProps> = ({ title }) => {
   const [brands, setBrands] = useState<Brand[]>([]);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const filterOptions = useFilterOptionsFromUrl();
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const optionsExcludingBrands = useMemo(() => {
-    const { brands, ...rest } = filterOptions;
-    return rest;
-  }, [filterOptions]);
 
   useEffect(() => {
-    const fetchBrands = async () => {
+    const loadBrands = async () => {
       try {
-        const data = await getBrands(optionsExcludingBrands);
-        setBrands((prev) => (JSON.stringify(data) !== JSON.stringify(prev) ? data : prev));
+        const { brands, ...otherFilter } = filterOptions;
+        const data = await getBrands(otherFilter);
+        setBrands(data);
       } catch (error) {
         console.error("Error fetching brands:", error);
       }
     };
-    fetchBrands();
-  }, [optionsExcludingBrands]);
+    loadBrands();
+  }, [filterOptions]);
 
-  const updateUrlWithSelectedBrands = useMemo(
-    () =>
-      debounce((updatedBrands: string[]) => {
-        const currentQueryParams = queryString.parse(location.search);
-        const updatedQueryParams = {
-          ...currentQueryParams,
-          brands: updatedBrands.length ? updatedBrands : undefined,
-        };
-        navigate(`/?${queryString.stringify(updatedQueryParams)}`);
-      }, 300),
-    [navigate, location.search]
-  );
+  const handleCheckboxChange = (brandName: string) => {
+    const selectedBrands = filterOptions.brands ? [...filterOptions.brands] : [];
 
-  useEffect(() => {
-    updateUrlWithSelectedBrands(selectedBrands);
-  }, [selectedBrands, updateUrlWithSelectedBrands]);
-
-  const handleCheckboxChange = useCallback((brandName: string) => {
-    setSelectedBrands((prev) =>
-      prev.includes(brandName) ? prev.filter((item) => item !== brandName) : [...prev, brandName]
-    );
-  }, []);
+    if (selectedBrands.includes(brandName)) {
+      filterOptions.brands = selectedBrands.filter((name) => name !== brandName);
+    } else {
+      selectedBrands.push(brandName);
+      filterOptions.brands = selectedBrands;
+    }
+    navigate(`?${queryString.stringify(filterOptions)}`, { replace: true });
+  };
 
   return (
     <div className="border-t border-gray-200 pt-8 pb-8">
@@ -63,10 +45,11 @@ const FilterByBrands: React.FC<FilterProps> = ({ title }) => {
             <label className="flex items-center cursor-pointer">
               <input
                 type="checkbox"
-                checked={selectedBrands.includes(brand.name)}
+                checked={filterOptions.brands?.includes(brand.name) || false}
                 onChange={() => handleCheckboxChange(brand.name)}
-                className={`h-4 w-4 appearance-none border border-gray-300 rounded-md cursor-pointer transition duration-200 
-                  ${selectedBrands.includes(brand.name) ? "bg-[#e2a400] border-[#e2a400]" : "bg-gray-100"}`}
+                className={`h-4 w-4 appearance-none border border-gray-300 rounded-md cursor-pointer transition duration-200 ${
+                  filterOptions.brands?.includes(brand.name) ? "bg-[#e2a400] border-[#e2a400]" : "bg-gray-100"
+                }`}
               />
               <span className="flex items-center ml-2">
                 <span className="text-sm">{brand.name}</span>
