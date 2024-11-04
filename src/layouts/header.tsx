@@ -1,6 +1,6 @@
 import logo from '../assets/images/logo.svg';
 import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
-import { useTranslation } from 'react-i18next'; // Nhập hook useTranslation
+import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../components/languageSwitcher';
 
 interface HeaderProps {

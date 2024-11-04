@@ -5,5 +5,10 @@
   },
   "alert": {
     "not_found": "Không tìm thấy sản phẩm nào!"
+  },
+  "filters": {
+    "title": "Lọc",
+    "clear filter": "Xóa bộ lọc",
+    "category": "Danh mục"
   }
 }

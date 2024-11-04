@@ -3,6 +3,11 @@
   "placeholder": {
     "search": "Product,brand,color,..."
   },
+  "filters": {
+    "title": "Filters",
+    "clear filter": "Clear filter",
+    "category": "Category"
+  },
   "alert": {
     "not_found": "Not found product!"
   }
